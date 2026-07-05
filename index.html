@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Should You Hire Luis? — Ask the Bot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1>Should You Hire Luis?</h1>
+            <p class="subtitle">paste a job description or ask about my experience. i'll give you the real talk.</p>
+        </header>
+
+        <div class="infra-banner">
+            <p>You're talking to <strong>qwen2.5:1.5b</strong> running on an Intel N95 — no GPU, no NPU, just vibes and 6W of TDP. The whole stack is a $150 mini PC in my basement that's also running my recipe app, so be kind. Why? Because if you can build AI infrastructure that works on hardware this modest, imagine what you'll do with a real budget. <a href="https://www.luiscerezo.org/resume/">See the full resume.</a></p>
+        </div>
+
+        <div class="chat-container" id="chat-container">
+            <div class="message assistant">
+                <div class="message-avatar"><img src="avatar.png" alt="Luis"></div>
+                <div class="message-content">
+                    <p>Hey! I'm Luis's resume bot. I know everything about his 25+ years of experience &mdash; from wrangling seismic data clusters in Houston to keeping $6B in credit card transactions flowing at five 9's, to his current gig as a Sr. TAM at AWS.</p>
+                    <p>Paste a job description and I'll tell you honestly how well he fits. Or just ask me anything about his background. I don't make stuff up, and I won't dodge the hard questions.</p>
+                    <p><em>What role are you considering him for?</em></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper">
+                <textarea id="user-input" placeholder="Paste a job description or ask a question..." rows="3"></textarea>
+                <button id="send-btn" title="Send">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+            <p class="disclaimer">powered by a local llm. responses based solely on luis's actual resume data.</p>
+        </div>
+    </div>
+
+    <div class="status-bar" id="status-bar">
+        <span class="status-dot"></span>
+        <span class="status-text">connecting to ollama...</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

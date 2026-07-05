@@ -1,0 +1,5 @@
+services:
+  chatbot:
+    build: .
+    network_mode: host
+    restart: always

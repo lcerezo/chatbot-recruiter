@@ -1,0 +1,25 @@
+{
+  "name": "Luis Cerezo",
+  "current": "Sr. TAM at AWS (L6/Enterprise Account Engineer III), Financial Services, US West, Feb 2024-present",
+  "years": "25+",
+  "experience": [
+    "AWS TAM (2021-present): Trusted Advisor to enterprise leadership. Well-Architected reviews, cost optimization, game days, workshops, proofs of concept. Onboarding coach for new TAMs. Serverless TFC member. Prototyping Focus Area lead.",
+    "Sr. SRE at PLXIS/IPC (2015-2021): Credit/debit platform for Subway, 25K+ locations, $6B/yr volume, 5 9's uptime. Cut AWS spend 21%. Reduced false pages 99%. Terraform, Ansible, Splunk architecture. PCI/DSS.",
+    "Sr. Linux Engineer at Viasat (2012-2015): Satellite internet billing/provisioning. RHEL, Solaris, Oracle RAC, 24/7 zero-downtime. PCI/SOX.",
+    "Sr. Linux Engineer at PGS (2005-2012): Global infra for seismic processing. SSO across 8 datacenters/1500+ hosts extended to tens of thousands on HPC. cfengine, Nagios. 500 PhD users. International travel, hiring manager KL.",
+    "Server Admin at Schlumberger (1999-2005): Multi-platform admin for 600+ users. Consolidated 30 Windows servers to 15 Linux/Unix."
+  ],
+  "skills": [
+    "AWS (VPC, EC2, S3, IAM, CloudWatch, LB, SG, Serverless, Step Functions, SNS/SQS, EventBridge)",
+    "IaC (Terraform, Ansible, Puppet, cfengine)",
+    "Linux 20+ yrs (RHEL, CentOS, Amazon Linux, SELinux enforcing)",
+    "Containers (Docker, Finch), CI/CD, Git",
+    "Observability (Splunk, DataDog, Nagios, CloudWatch)",
+    "Event-driven/decoupled architectures",
+    "PCI/DSS, security shift-left",
+    "DNS, Cloudflare"
+  ],
+  "certs": "AWS SA Pro, AWS SysOps, AWS Dev, AWS Security Specialty, AWS Networking Specialty, Terraform Associate, plus more",
+  "soft": "Humble professionalism, builder of peers, outcome-focused, blameless PIRs, lifelong learner, coach, encourager",
+  "philosophy": "All systems fail smart people learn. Reliability is a core feature. Shift security left. Seek objectives over requirements."
+}

@@ -1,0 +1,135 @@
+AGENT NOTES — resume chatbot
+Lessons learned and operating guidance. Read this before making changes.
+Last updated: 2026-07-05
+Repo: github.com/lcerezo/chatbot-recruiter (deployed copy may live elsewhere)
+
+WHAT THIS IS
+------------
+A "Should You Hire Luis?" resume chatbot. Static HTML/JS served by nginx in a
+podman container, which also proxies to Ollama running on the host. The model
+is qwen2.5:1.5b on an Intel N95 mini PC (no GPU/NPU, ~$150, in the basement,
+shared with a recipe app). Served publicly via a Cloudflare tunnel.
+
+ARCHITECTURE
+------------
+browser -> Cloudflare -> cloudflared tunnel -> nginx :8888 (this container)
+                                                |- static files (/usr/share/nginx/html)
+                                                |- POST /ollama/api/chat  -> host 127.0.0.1:11434
+                                                |- GET  /ollama/api/tags  -> host 127.0.0.1:11434
+                                                |- everything else under /ollama/ -> 403
+
+- Container: podman (NOT docker; use podman-compose), network_mode: host.
+- The cloudflared systemd service uses a --token (remotely-managed tunnel).
+  Its ingress rules live in the Cloudflare Zero Trust dashboard, NOT in
+  ~/.cloudflared/config.yml. The local config.yml exists but is IGNORED by
+  the running service. Don't waste time editing it and restarting.
+- Restart policy is "always" + the user-level podman-restart.service is
+  enabled, which is what brings the container back after reboot.
+  (podman-restart only starts containers with policy "always", not
+  "unless-stopped" — that's why compose file says always.)
+
+DEPLOYING
+---------
+cd <this repo's deployment checkout>
+podman-compose down && podman rmi localhost/chatbot_chatbot:latest; podman-compose up -d --build
+
+Gotchas learned the hard way:
+1. podman-compose "up --build" may reuse a cached image; remove the image to
+   be sure. Verify with: curl -s http://localhost:8888/ | grep <new-thing>
+2. Check for STALE CONTAINERS holding port 8888: podman ps. An old container
+   named differently (e.g. luis-chatbot) once kept serving while the new one
+   silently failed to bind. Both showed "Up" — only `podman ps` revealed it.
+3. Cloudflare edge caches HTML. nginx now sends Cache-Control: no-cache on
+   static files, but if you ever see stale content at the public URL while
+   localhost:8888 is correct, test with ?nocache=1 query string; if that
+   shows fresh content it's CF cache. Purge from dashboard or just wait.
+4. New static files MUST be added to the Dockerfile COPY list or they 404.
+
+FILES
+-----
+index.html          UI shell. Infra banner (the N95 joke) lives here.
+style.css           Typewriter aesthetic (Special Elite / Cousine fonts).
+app.js              Chat logic, streaming, guardrails, history trimming.
+system-prompt.txt   The system prompt TEMPLATE ({{RESUME_DATA}} placeholder).
+                    Fetched at runtime by app.js AND read by eval.py — single
+                    source of truth, edit here only.
+guardrails.json     Client-side regex blocklist. Same deal: used by both
+                    app.js and eval.py.
+resume-context.json Resume data injected into the prompt (compact JSON —
+                    do NOT pretty-print, it doubles token cost).
+eval.py             Prompt eval harness. RUN THIS AFTER ANY PROMPT CHANGE.
+nginx.conf          Static serving + locked-down Ollama proxy + rate limit.
+avatar.png          Luis's face, 112px (resized from 1.7MB original — keep
+                    it small).
+
+PROMPT TUNING WORKFLOW
+----------------------
+1. Edit system-prompt.txt and/or guardrails.json.
+2. python3 eval.py   (runs cases against local Ollama, temp 0, seed 42,
+   a few minutes on the N95; -v for full replies)
+3. Only deploy when ALL cases pass.
+4. Found a new failure in production? Add a case to CASES in eval.py FIRST,
+   then tune until green. Cases are {message, must_match, must_not_match}
+   regex checks, case-insensitive.
+
+LESSONS ABOUT qwen2.5:1.5b (IMPORTANT)
+--------------------------------------
+1. IT CANNOT RELIABLY REFUSE CODE VIA PROMPT ALONE. Three prompt structures
+   were tried, including a FINAL RULE at the very end — it still wrote bash
+   scripts on request. Helpfulness training beats instructions at 1.5B.
+   THE REGEX GUARDRAILS IN guardrails.json ARE LOAD-BEARING for code-request
+   refusals. If a failure keeps happening at the model layer after ~2 prompt
+   tweaks, stop tuning and add a regex instead.
+   BUT: aggressive guardrails create false positives on legitimate recruiter
+   questions. Real examples that were once wrongly blocked: "I have a new
+   role open", a JD containing "act as a trusted advisor", "can you give an
+   example of his leadership", "help with assessing fit". eval.py has
+   expect_guardrail: False cases guarding these — keep them passing.
+2. Over-strict prompts break the core feature: one version refused a
+   legitimate pasted job description as a "nice try" injection attempt.
+   The prompt must explicitly say pasted JDs are the job, not an attack.
+   eval.py's "finds serverless for JD match" case guards this regression.
+3. Put the resume DATA before the RULES in the prompt — small models weight
+   the end of the prompt more heavily, and rules are what need to stick.
+4. Rule 4 (check skills AND certs lists before claiming a gap) is what fixed
+   "missing key experience that matches" complaints.
+5. num_ctx is 8192. The compact resume JSON + prompt is ~1.5k chars. Don't
+   let history + a pasted JD blow past this or Ollama silently truncates
+   FROM THE TOP, which deletes the system prompt first. History is trimmed
+   to ~16 messages, kept to even counts so user/assistant pairs align.
+6. Upgrade path if quality keeps disappointing: try qwen2.5:3b. The N95 can
+   probably run it, just slower. Re-run eval.py after switching. The model
+   name lives in THREE places: app.js (MODEL const), eval.py (MODEL const),
+   and the index.html infra banner text. Change all three.
+
+SECURITY POSTURE
+----------------
+- nginx exposes ONLY chat (POST) and tags (GET). pull/delete/generate etc.
+  are 403 — never widen the /ollama/ proxy back to a catch-all; someone can
+  fill the disk with model pulls or use the box as a free LLM.
+- Rate limit: 6 req/min per visitor, burst 3, returns 429. Keyed on the
+  CF-Connecting-IP header when present (Cloudflare-fronted traffic), falling
+  back to $remote_addr for direct/LAN requests so nothing is unmetered.
+- The system prompt is publicly fetchable (system-prompt.txt) and was always
+  extractable anyway — treat it as public. Nothing sensitive goes in it.
+- Client-side guardrails are bypassable by anyone using curl; they exist to
+  keep the model on-script for normal users, not as a security boundary.
+  The nginx lockdown + rate limit are the actual security.
+
+STREAMING / FRONTEND NOTES
+--------------------------
+- Ollama streams NDJSON; a JSON object CAN split across network chunks.
+  app.js buffers partial lines and uses decoder.decode(value, {stream:true}).
+  Don't "simplify" this back to per-chunk parsing — it silently drops words.
+- Renders are throttled to 50ms with a final render after the stream ends.
+- Guardrail-blocked exchanges are shown in the UI but NOT pushed into
+  conversationHistory (the model never sees canned replies it didn't write).
+- Bot avatar appears in 3 places: index.html greeting, createMessageElement,
+  createTypingIndicator (app.js). Change all three or it gets inconsistent.
+
+VOICE / TONE
+------------
+Self-deprecating frugal-stack humor. The banner brags about the $150 N95 and
+asks visitors to be kind because the recipe app shares the box. Error
+messages stay in character ("the mini PC in the basement is thinking too
+hard"), never expose raw error internals to recruiters.

@@ -1,0 +1,20 @@
+{
+  "patterns": [
+    "(write|show|give|generate|create|make)\\s+(me\\s+)?(a|some|the|an|quick|simple)?\\s*(\\w+\\s+)?(code|coding|script|program|function|snippet)",
+    "\\b(python|bash|javascript|typescript|terraform|golang|java|rust|node|sql)\\s+(code|example|script|snippet|function)\\b",
+    "(write|compose|make)\\s+(me\\s+)?(an?|some)\\s+(essay|poem|story|song)",
+    "help\\s+(me\\s+)?(debug|fix)\\b",
+    "how\\s+(do|would|can)\\s+(i|you|luis)\\s+(write|code|implement|script)",
+    "what\\s+(is|are|do you think about)\\s+(the meaning|politics|religion|best programming)",
+    "(ignore|disregard|forget|override|bypass|skip)\\s+(your|all|any|the|previous|prior|above|earlier)?\\s*(instructions|rules|prompt|guidelines|constraints|directives)",
+    "pretend\\s+(you are|to be|you're)",
+    "act\\s+as\\s+if\\s+you",
+    "you\\s+are\\s+(now|no longer)",
+    "forget\\s+(everything|your|all)",
+    "new\\s+(instructions|persona|identity)",
+    "system\\s+(prompt|message|instructions)",
+    "(what|show|reveal|print|repeat|output|say|display)\\s+(are|me|is)?\\s*(your|the)\\s+(initial\\s+)?(prompt|instructions|rules|context|system)",
+    "repeat\\s+(the\\s+)?(text|everything|words|message)\\s*(above|before)",
+    "\\b(jailbreak|dan\\s+mode|developer\\s+mode)\\b"
+  ]
+}
