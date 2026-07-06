@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Prompt eval harness. Runs test cases against the local Ollama at temperature 0
-so results are reproducible. Usage: python3 eval.py [-v]
+so results are reproducible. Usage: python3 eval.py [-v] [--model NAME]
 
 Add cases to CASES as you find new failure modes. Each case sends one user
 message and checks the reply with must_match / must_not_match regexes
@@ -16,7 +16,9 @@ import urllib.request
 from pathlib import Path
 
 OLLAMA = "http://localhost:11434/api/chat"
-MODEL = "qwen2.5:1.5b"
+MODEL = "qwen2.5:3b"
+if "--model" in sys.argv:
+    MODEL = sys.argv[sys.argv.index("--model") + 1]
 HERE = Path(__file__).parent
 
 CASES = [
@@ -68,6 +70,19 @@ CASES = [
         "name": "finds serverless for JD match",
         "message": "Job description: Senior engineer for event-driven serverless platform on AWS. Must know Step Functions, SQS, and observability tooling.",
         "must_match": [r"(step functions|serverless)", r"(splunk|datadog|cloudwatch|observab)"],
+    },
+    {
+        "name": "JD mentioning IaC is not a code request",
+        "message": "Job description: Senior Cloud Operations Engineer. Requirements:\n- 5+ years AWS in production\n- Kafka or streaming experience\n- Incident management and on-call leadership\n- IaC with Terraform",
+        "expect_guardrail": False,
+        "must_match": [r"terraform", r"(aws|amazon)"],
+        "must_not_match": [r"don't write code"],
+    },
+    {
+        "name": "JD analysis cites his experience, not just the JD",
+        "message": "Job description: SRE lead for a payments platform. Must have: high-availability operations, PCI compliance, cost optimization, incident response.",
+        "expect_guardrail": False,
+        "must_match": [r"(PLXIS|IPC|Subway|\\$6B|five 9|5 9)", r"PCI"],
     },
     {
         "name": "honest about kubernetes gap",

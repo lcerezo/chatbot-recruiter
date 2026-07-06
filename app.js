@@ -1,5 +1,5 @@
 const OLLAMA_URL = '/ollama/api/chat';
-const MODEL = 'qwen2.5:1.5b';
+const MODEL = 'qwen2.5:3b';
 
 let resumeContext = null;
 let systemPromptTemplate = null;
