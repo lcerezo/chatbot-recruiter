@@ -1,25 +1,43 @@
 {
   "name": "Luis Cerezo",
-  "current": "Sr. TAM at AWS (L6/Enterprise Account Engineer III), Financial Services, US West, Feb 2024-present",
+  "current": "Sr. TAM at AWS, Enterprise Support, Financial Services Industry, US West, Feb 2024-present",
   "years": "25+",
   "experience": [
-    "AWS TAM (2021-present): Trusted Advisor to enterprise leadership. Well-Architected reviews, cost optimization, game days, workshops, proofs of concept. Onboarding coach for new TAMs. Serverless TFC member. Prototyping Focus Area lead.",
+    "AWS TAM (2021-present): Trusted Advisor to Fortune 500 financial services (payments, banking, insurance). Enterprise architecture, multi-region resilience, GenAI operations, contact center modernization. Well-Architected reviews, cost optimization, game days, workshops. Onboarding coach for new TAMs.",
     "Sr. SRE at PLXIS/IPC (2015-2021): Credit/debit platform for Subway, 25K+ locations, $6B/yr volume, 5 9's uptime. Cut AWS spend 21%. Reduced false pages 99%. Terraform, Ansible, Splunk architecture. PCI/DSS.",
     "Sr. Linux Engineer at Viasat (2012-2015): Satellite internet billing/provisioning. RHEL, Solaris, Oracle RAC, 24/7 zero-downtime. PCI/SOX.",
     "Sr. Linux Engineer at PGS (2005-2012): Global infra for seismic processing. SSO across 8 datacenters/1500+ hosts extended to tens of thousands on HPC. cfengine, Nagios. 500 PhD users. International travel, hiring manager KL.",
     "Server Admin at Schlumberger (1999-2005): Multi-platform admin for 600+ users. Consolidated 30 Windows servers to 15 Linux/Unix."
   ],
+  "aws_depth": [
+    "Compute/containers: EKS (auth migration, pod identity, cluster upgrades), Lambda (serverless, fan-out patterns), ECS, CodeBuild (led 18-week fleet migration campaign, kernel-level eBPF debugging), SageMaker (ML pipeline optimization)",
+    "Data: DynamoDB (multi-account migration planning at hundreds-of-TB scale, thousands of tables), Aurora PostgreSQL (major upgrades, DR switchover — sub-5-minute failover in live DR test), S3 (performance engineering for large migrations), FSx for NetApp ONTAP",
+    "Amazon Connect: led migration from legacy contact center platform; voice, chat, email routing; built serverless email-routing prototype (SES + Lambda + CDK); voice AI agent workshop development; specialist training completed",
+    "Networking/security: Direct Connect multi-region architecture, Systems Manager cross-account solution (CDK/Terraform/CloudFormation variants), CloudTrail advanced event selectors, Inspector, EDR/container security integrations",
+    "GenAI: Bedrock operational reviews (guardrails, prompt caching, capacity risk analysis ahead of rapid growth), built AI productivity agents with anti-hallucination guardrails and evaluation frameworks, delivered AIOps agent demos to customer engineering leadership",
+    "API/integration: API Gateway at expert level (REST vs HTTP API vs AppSync positioning, throttling, caching, custom authorizers), delivered hands-on L300 workshops to enterprise customers",
+    "Migration: DMS planning for 200 TB on-prem-to-cloud, MSK hardening and lifecycle, EC2 instance modernization campaigns, Graviton ARM64 readiness tooling"
+  ],
+  "builds": "Strong bias toward building over advising: ships working prototypes with README, deploy guide, and teardown — not slide decks. Examples: serverless email routing pipeline with full CI/CD (CDK TypeScript), cross-account EKS Pod Identity POC with test runner, cross-account SSM architecture in three IaC variants, GenAI-powered Graviton readiness scanner (Python + Bedrock), reusable CloudWatch debug dashboards, polished HTML report templates. Languages: TypeScript, Python, Bash, Go. IaC: CDK (primary), CloudFormation, Terraform. Validates with cfn-lint/cdk-nag before handoff.",
+  "outcomes": [
+    "Led 18-week migration campaign unblocking security compliance across tens of thousands of AWS accounts",
+    "Isolated third-party vendor as root cause of fleet issue using controlled A/B kernel testing",
+    "DR failover exercise: under 5 minutes of downtime, exceeding executive expectations",
+    "Identified GenAI operational risks from rapid growth before production impact",
+    "Executive-level engagement on database migrations at hundreds-of-TB scale"
+  ],
   "skills": [
     "AWS (VPC, EC2, S3, IAM, CloudWatch, LB, SG, Serverless, Step Functions, SNS/SQS, EventBridge)",
-    "IaC (Terraform, Ansible, Puppet, cfengine)",
+    "IaC (CDK, Terraform, CloudFormation, Ansible, Puppet, cfengine)",
     "Linux 20+ yrs (RHEL, CentOS, Amazon Linux, SELinux enforcing)",
-    "Containers (Docker, Finch), CI/CD, Git",
+    "Containers (Docker, Finch, EKS/K8s), CI/CD, Git",
     "Observability (Splunk, DataDog, Nagios, CloudWatch)",
     "Event-driven/decoupled architectures",
+    "GenAI/LLM operations (Bedrock, agents, MCP, guardrails, evals)",
     "PCI/DSS, security shift-left",
     "DNS, Cloudflare"
   ],
-  "certs": "AWS SA Pro, AWS SysOps, AWS Dev, AWS Security Specialty, AWS Networking Specialty, Terraform Associate, plus more",
+  "certs": "AWS SA Pro, AWS SysOps, AWS Dev, AWS Security Specialty, AWS Networking Specialty, AWS AI Practitioner (2026), Terraform Associate, plus more; additional AWS GenAI professional certs in progress",
   "soft": "Humble professionalism, builder of peers, outcome-focused, blameless PIRs, lifelong learner, coach, encourager",
   "philosophy": "All systems fail smart people learn. Reliability is a core feature. Shift security left. Seek objectives over requirements."
 }
