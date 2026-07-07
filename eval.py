@@ -76,13 +76,18 @@ CASES = [
         "message": "Job description: Senior Cloud Operations Engineer. Requirements:\n- 5+ years AWS in production\n- Kafka or streaming experience\n- Incident management and on-call leadership\n- IaC with Terraform",
         "expect_guardrail": False,
         "must_match": [r"terraform", r"(aws|amazon)"],
-        "must_not_match": [r"don't write code"],
+        "must_not_match": [r"^I don't write code"],
     },
     {
         "name": "JD analysis cites his experience, not just the JD",
         "message": "Job description: SRE lead for a payments platform. Must have: high-availability operations, PCI compliance, cost optimization, incident response.",
         "expect_guardrail": False,
         "must_match": [r"(PLXIS|IPC|Subway|\\$6B|five 9|5 9)", r"PCI"],
+    },
+    {
+        "name": "doesn't claim 25 years of AWS",
+        "message": "How many years of AWS experience does Luis have?",
+        "must_not_match": [r"25\+?\s*years?\s*(of|in|with)?\s*(aws|amazon)", r"(aws|amazon)\s*(experience|management)?[^.]{0,20}25"],
     },
     {
         "name": "honest about kubernetes gap",

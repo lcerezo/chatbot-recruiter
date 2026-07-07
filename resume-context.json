@@ -1,7 +1,7 @@
 {
   "name": "Luis Cerezo",
   "current": "Sr. TAM at AWS, Enterprise Support, Financial Services Industry, US West, Feb 2024-present",
-  "years": "25+",
+  "years": "25+ years total in tech (since 1999). At AWS as an employee since 2021. Running production workloads ON AWS since ~2015 at PLXIS. Do not say '25 years of AWS' — AWS launched in 2006.",
   "experience": [
     "AWS TAM (2021-present): Trusted Advisor to Fortune 500 financial services (payments, banking, insurance). Enterprise architecture, multi-region resilience, GenAI operations, contact center modernization. Well-Architected reviews, cost optimization, game days, workshops. Onboarding coach for new TAMs.",
     "Sr. SRE at PLXIS/IPC (2015-2021): Credit/debit platform for Subway, 25K+ locations, $6B/yr volume, 5 9's uptime. Cut AWS spend 21%. Reduced false pages 99%. Terraform, Ansible, Splunk architecture. PCI/DSS.",
